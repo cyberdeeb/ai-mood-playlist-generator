@@ -20,15 +20,16 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
             process.env.SPOTIFY_CLIENT_SECRET as string
         );
 
-        const data = await spotify.search(mood, ['playlist'], 'US', 5);
+        const data = await spotify.search(mood, ['playlist'], 'US', 10);
 
-        const playlists = data.playlists?.items.map((playlist) => ({
+        const playlists = (data.playlists?.items ?? [])
+        .filter((p) => p !== null)
+        .map((playlist) => ({
             title: playlist.name,
             url: playlist.external_urls.spotify,
-            primary_image: playlist.images?.[0].url ?? null,
+            primary_image: playlist.images?.[0]?.url ?? null,
             description: playlist.description,
-            followers: playlist.followers
-        })) ?? [];
+        }));
 
         res.json({playlists})
     } catch (error) {
