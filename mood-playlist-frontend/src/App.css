@@ -5,8 +5,110 @@
   text-align: center;
 }
 
+.description {
+  font-size: 2rem;
+}
+
+.card {
+  padding: 1em;
+}
+
+.form-section {
+  margin-top: 2rem;
+}
+
+.mood-form {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+input[type="text"] {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  width: 250px;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #646cff;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #4a4dd9;
+}
+
+.playlist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.playlist-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.playlist-content {
+  flex: 1;
+  text-align: left;
+}
+
+.playlist-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+}
+
+.playlist-description {
+  margin: 0 0 0.5rem 0;
+  color: #ccc;
+}
+
+.playlist-link {
+  color: #646cff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.playlist-link:hover {
+  text-decoration: underline;
+}
+
+.logo-section {
+  padding-top: 2rem;
+}
+
 .logo {
-  height: 6em;
+  height: 5em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -18,23 +120,9 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
+.powered-by {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .read-the-docs {

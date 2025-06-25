@@ -1,5 +1,7 @@
 import { use, useState } from 'react';
 import reactLogo from './assets/react.svg';
+import spotifyLogo from './assets/spotify.svg';
+import openaiLogo from './assets/openai.png';
 import './App.css';
 
 function App() {
@@ -45,32 +47,45 @@ function App() {
       <div>
         <a href="https://vite.dev" target="_blank">
         </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
       </div>
       <h1>Mood-Based Spotify Playlist Generator</h1>
       <div className="card">
-        <p>Type how you feel and get a mood-matching playlist</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            type='text'
-            placeholder='How are you feeling?'
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            />
-            <button type='submit'>Submit</button>
-        </form>
+        <p className='description'>Type how you feel and get a mood-matching playlist</p>
+        <div className='form-section'>
+          <form onSubmit={handleSubmit} className='mood-form'>
+            <input
+              type='text'
+              placeholder='How are you feeling?'
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              />
+              <button type='submit'>Submit</button>
+          </form>
+          </div>
       </div>
-      <div>
+      <div className='playlist-list'>
         {playlists.map((playlist, index) =>(
-          <div key={index}>
-            <h3>{playlist.title}</h3>
-            <img src={playlist.primary_image} alt={playlist.title} />
-            <p>{playlist.description}</p>
-            <a href={playlist.url} target='_blank'>Listen on Spotify</a>
+          <div className='playlist-item' key={index}>
+            <img src={playlist.primary_image} alt={playlist.title} className='playlist-image' />
+            <div className='playlist-content'>
+              <h3 className='playlist-title'>{playlist.title}</h3>
+              <p className='playlist-description'>{playlist.description}</p>
+              <a className='playlist-link' href={playlist.url} target='_blank' rel="noopener noreferrer">Listen on Spotify</a>
+            </div>
           </div>
         ))}
+      </div>
+      <div className='logo-section'>
+        <p className='powered-by'>Powered by:</p>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+        <a href="https://openai.com/api/" target="_blank">
+          <img src={openaiLogo} className="logo" alt="Open AI logo" />
+        </a>
+        <a href="https://developer.spotify.com/" target="_blank">
+          <img src={spotifyLogo} className="logo react" alt="Spotify logo" />
+        </a>
       </div>
     </>
   );
