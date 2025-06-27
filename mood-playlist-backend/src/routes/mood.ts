@@ -16,7 +16,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
       messages: [
         {
           role: 'user',
-          content: `What is the mood of this text? Return just one word. Text: ${text}`,
+          content: `Determine the overall emotional mood of the following passage. Return one descriptive word that captures the dominant emotion or atmosphere (e.g., serene, bitter, tense, joyful, somber, exhilarated, etc.). Text: ${text}`,
         },
       ],
       max_tokens: 5,

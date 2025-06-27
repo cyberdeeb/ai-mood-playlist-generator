@@ -5,6 +5,15 @@
   text-align: center;
 }
 
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.playlist-title, h1, h2, h3 {
+  font-family: 'Lora', serif;
+}
+
 .description {
   font-size: 2rem;
 }
@@ -22,6 +31,7 @@
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  margin-top: 4rem;
 }
 
 input[type="text"] {
@@ -109,20 +119,46 @@ button:hover {
 
 .logo {
   height: 5em;
+  width: 5em;
+  object-fit: contain;
   padding: 1.5em;
   will-change: filter;
-  transition: filter 300ms;
+  transition: filter 300ms, background-color 300ms;
+  border-radius: 50%;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.logo.openai {
+  height: 6em;
+  width: 6em;
+  object-fit: contain;
 }
+
+
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 1.5em #61DAFB);
+}
+
+.logo.openai:hover {
+  filter: drop-shadow(0 0 1.5em #36454F);
+}
+
+.logo.spotify:hover {
+  filter: drop-shadow(0 0 1.5em #1DB954);
 }
 
 .powered-by {
   font-size: 1.5rem;
   font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
 .read-the-docs {

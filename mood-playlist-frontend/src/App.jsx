@@ -1,7 +1,7 @@
 import { use, useState } from 'react';
 import reactLogo from './assets/react.svg';
 import spotifyLogo from './assets/spotify.svg';
-import openaiLogo from './assets/openai.png';
+import openaiLogo from './assets/openai.svg';
 import './App.css';
 
 function App() {
@@ -77,15 +77,17 @@ function App() {
       </div>
       <div className='logo-section'>
         <p className='powered-by'>Powered by:</p>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://openai.com/api/" target="_blank">
-          <img src={openaiLogo} className="logo" alt="Open AI logo" />
-        </a>
-        <a href="https://developer.spotify.com/" target="_blank">
-          <img src={spotifyLogo} className="logo react" alt="Spotify logo" />
-        </a>
+        <div className='logo-wrapper'>
+          <a href="https://react.dev" target="_blank">
+            <img src={reactLogo} className="logo react" alt="React logo" />
+          </a>
+          <a href="https://openai.com/api/" target="_blank">
+            <img src={openaiLogo} className="logo openai" alt="Open AI logo" />
+          </a>
+          <a href="https://developer.spotify.com/" target="_blank">
+            <img src={spotifyLogo} className="logo spotify" alt="Spotify logo" />
+          </a>
+        </div>
       </div>
     </>
   );
