@@ -1,12 +1,24 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 
 import moodRoutes from './routes/mood';
 import playlistRoutes from './routes/playlist';
 
 dotenv.config();
+
+// Validate required environment variables
+const requiredEnvVars = [
+  'OPENAI_API_KEY',
+  'SPOTIFY_CLIENT_ID',
+  'SPOTIFY_CLIENT_SECRET',
+];
+requiredEnvVars.forEach((envVar) => {
+  if (!process.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
+    process.exit(1);
+  }
+});
 
 const app: Application = express();
 
@@ -20,7 +32,7 @@ app.use(cors(corsOptions));
 
 app.options('*', cors(corsOptions));
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/detect-mood', moodRoutes);
 app.use('/playlist', playlistRoutes);
