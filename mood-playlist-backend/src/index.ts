@@ -10,7 +10,14 @@ dotenv.config();
 
 const app: Application = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://ai-mood-generator-playlist.netlify.app', // your Netlify site
+    methods: ['GET', 'POST'],
+    credentials: false,
+  })
+);
+
 app.use(bodyParser.json());
 
 app.use('/detect-mood', moodRoutes);
