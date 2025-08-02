@@ -12,7 +12,7 @@ const app: Application = express();
 
 app.use(
   cors({
-    origin: 'https://ai-mood-generator-playlist.netlify.app', // your Netlify site
+    origin: 'https://ai-mood-generator-playlist.netlify.app/',
     methods: ['GET', 'POST'],
     credentials: false,
   })
