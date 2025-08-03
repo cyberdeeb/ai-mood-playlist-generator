@@ -15,6 +15,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
+    console.log(`Searching Spotify for mood: ${mood}`);
+
     const spotify = await SpotifyApi.withClientCredentials(
       process.env.SPOTIFY_CLIENT_ID as string,
       process.env.SPOTIFY_CLIENT_SECRET as string
@@ -31,10 +33,25 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
         description: playlist.description,
       }));
 
+    console.log(`Found ${playlists.length} playlists for mood: ${mood}`);
     res.json({ playlists });
-  } catch (error) {
-    console.error('Error fetching playlists from Spotify: ', error);
-    res.status(500).json({ error: 'Failed to fetch playlists' });
+  } catch (error: any) {
+    console.error('Error fetching playlists from Spotify:', error);
+
+    // Handle specific Spotify API errors
+    if (error.status === 401) {
+      res.status(500).json({ error: 'Spotify API authentication error' });
+    } else if (error.status === 429) {
+      res
+        .status(503)
+        .json({ error: 'Rate limit exceeded, please try again later' });
+    } else if (error.status >= 500) {
+      res
+        .status(503)
+        .json({ error: 'Spotify service temporarily unavailable' });
+    } else {
+      res.status(500).json({ error: 'Failed to fetch playlists' });
+    }
   }
 });
 

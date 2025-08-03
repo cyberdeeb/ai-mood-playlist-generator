@@ -13,19 +13,34 @@ const requiredEnvVars = [
   'SPOTIFY_CLIENT_ID',
   'SPOTIFY_CLIENT_SECRET',
 ];
-requiredEnvVars.forEach((envVar) => {
-  if (!process.env[envVar]) {
-    console.error(`Missing required environment variable: ${envVar}`);
+
+const missingVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
+if (missingVars.length > 0) {
+  console.error(
+    `Missing required environment variables: ${missingVars.join(', ')}`
+  );
+  console.error(
+    'Please set these variables in your Railway environment settings'
+  );
+  // Don't exit in production, let Railway handle it
+  if (process.env.NODE_ENV !== 'production') {
     process.exit(1);
   }
-});
+}
 
 const app: Application = express();
 
+// More permissive CORS for development and production
 const corsOptions = {
-  origin: 'https://ai-mood-generator-playlist.netlify.app',
-  methods: ['GET', 'POST'],
+  origin: [
+    'https://ai-mood-generator-playlist.netlify.app',
+    'http://localhost:5173', // Vite dev server
+    'http://localhost:3000', // React dev server
+    /\.netlify\.app$/, // Any Netlify subdomain
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
   credentials: false,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
