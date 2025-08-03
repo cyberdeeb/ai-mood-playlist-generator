@@ -9,17 +9,24 @@ dotenv.config();
 
 const app: Application = express();
 
-// Open CORS for testing (as you wanted)
-app.use(cors());
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS;
+
+// Configure CORS for production
+app.use(
+  cors({
+    origin: ALLOWED_ORIGINS?.split(',') || [],
+    credentials: true,
+  })
+);
 
 // Use Express built-in JSON parser (body-parser is deprecated)
 app.use(express.json());
 
 // Health check for Railway
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'healthy', 
-    timestamp: new Date().toISOString() 
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
   });
 });
 
