@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 
 import moodRoutes from './routes/mood';
@@ -7,99 +8,20 @@ import playlistRoutes from './routes/playlist';
 
 dotenv.config();
 
-// Validate required environment variables
-const requiredEnvVars = [
-  'OPENAI_API_KEY',
-  'SPOTIFY_CLIENT_ID',
-  'SPOTIFY_CLIENT_SECRET',
-];
-
-const missingVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
-if (missingVars.length > 0) {
-  console.error(
-    `Missing required environment variables: ${missingVars.join(', ')}`
-  );
-  console.error(
-    'Please set these variables in your Railway environment settings'
-  );
-  if (process.env.NODE_ENV !== 'production') {
-    process.exit(1);
-  }
-}
-
 const app: Application = express();
 
-// const allowedOrigins = [
-//   'https://ai-mood-generator-playlist.netlify.app',
-//   'http://localhost:5173',
-//   'http://localhost:3000',
-// ];
+app.use(cors());
+app.use(bodyParser.json());
 
-// CORS configuration
-// const corsOptions = {
-//   origin: (origin: any, callback: any) => {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
-
-app.use(
-  cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
-//app.options('*', cors(corsOptions));
-
-// Use Express's built-in JSON parser
-app.use(express.json({ limit: '10mb' }));
-app.use((req, res, next) => {
-  console.log(`Incoming request from origin: ${req.headers.origin}`);
-  next();
-});
-
-// Routes
 app.use('/detect-mood', moodRoutes);
 app.use('/playlist', playlistRoutes);
 
-// Error handling middleware
-app.use((err: any, req: any, res: any, next: any) => {
-  console.error('Unhandled error:', err);
-  res.status(500).json({ error: 'Internal server error' });
-});
-
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
-
-// Railway provides PORT environment variable
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5050;
-
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 Health check: http://localhost:${PORT}/health`);
-  if (process.env.RAILWAY_STATIC_URL) {
-    console.log(`🚄 Railway URL: ${process.env.RAILWAY_STATIC_URL}`);
-  }
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Process terminated');
-  });
-});
-
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
-  server.close(() => {
-    console.log('Process terminated');
-  });
-});
+const PORT = process.env.PORT || 5050;
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
+app.listen(PORT, () =>
+  console.log(
+    `Server running on ${PORT}
+  )
+);
