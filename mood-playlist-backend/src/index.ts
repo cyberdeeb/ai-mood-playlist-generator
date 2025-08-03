@@ -29,34 +29,28 @@ if (missingVars.length > 0) {
 
 const app: Application = express();
 
+const allowedOrigins = [
+  'https://ai-mood-generator-playlist.netlify.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+];
+
 // CORS configuration
 const corsOptions = {
-  origin: [
-    'https://ai-mood-generator-playlist.netlify.app',
-    'http://localhost:5173', // Vite dev server
-    'http://localhost:3000', // React dev server
-    /\.netlify\.app$/, // Any Netlify subdomain
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: false,
-  optionsSuccessStatus: 200,
+  origin: (origin: any, callback: any) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 };
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// Use Express's built-in JSON parser instead of body-parser
+// Use Express's built-in JSON parser
 app.use(express.json({ limit: '10mb' }));
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV || 'development',
-    version: '1.0.1', // Added version to force new deployment
-  });
-});
 
 // Routes
 app.use('/detect-mood', moodRoutes);
