@@ -29,28 +29,38 @@ if (missingVars.length > 0) {
 
 const app: Application = express();
 
-const allowedOrigins = [
-  'https://ai-mood-generator-playlist.netlify.app',
-  'http://localhost:5173',
-  'http://localhost:3000',
-];
+// const allowedOrigins = [
+//   'https://ai-mood-generator-playlist.netlify.app',
+//   'http://localhost:5173',
+//   'http://localhost:3000',
+// ];
 
 // CORS configuration
-const corsOptions = {
-  origin: (origin: any, callback: any) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
+// const corsOptions = {
+//   origin: (origin: any, callback: any) => {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+//app.options('*', cors(corsOptions));
 
 // Use Express's built-in JSON parser
 app.use(express.json({ limit: '10mb' }));
+app.use((req, res, next) => {
+  console.log(`Incoming request from origin: ${req.headers.origin}`);
+  next();
+});
 
 // Routes
 app.use('/detect-mood', moodRoutes);
