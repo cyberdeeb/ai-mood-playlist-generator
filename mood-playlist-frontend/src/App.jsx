@@ -1,4 +1,4 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import spotifyLogo from './assets/spotify.svg';
 import openaiLogo from './assets/openai.svg';
@@ -95,13 +95,21 @@ function App() {
       <div className="logo-section">
         <p className="powered-by">Powered by:</p>
         <div className="logo-wrapper">
-          <a href="https://react.dev" target="_blank">
+          <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
             <img src={reactLogo} className="logo react" alt="React logo" />
           </a>
-          <a href="https://openai.com/api/" target="_blank">
+          <a
+            href="https://openai.com/api/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={openaiLogo} className="logo openai" alt="Open AI logo" />
           </a>
-          <a href="https://developer.spotify.com/" target="_blank">
+          <a
+            href="https://developer.spotify.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={spotifyLogo}
               className="logo spotify"
