@@ -22,7 +22,6 @@ if (missingVars.length > 0) {
   console.error(
     'Please set these variables in your Railway environment settings'
   );
-  // Don't exit in production, let Railway handle it
   if (process.env.NODE_ENV !== 'production') {
     process.exit(1);
   }
@@ -30,7 +29,7 @@ if (missingVars.length > 0) {
 
 const app: Application = express();
 
-// More permissive CORS for development and production
+// CORS configuration
 const corsOptions = {
   origin: [
     'https://ai-mood-generator-playlist.netlify.app',
@@ -44,13 +43,58 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.options('*', cors(corsOptions));
 
-app.use(express.json());
+// Use Express's built-in JSON parser instead of body-parser
+app.use(express.json({ limit: '10mb' }));
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV || 'development',
+  });
+});
+
+// Routes
 app.use('/detect-mood', moodRoutes);
 app.use('/playlist', playlistRoutes);
 
+// Error handling middleware
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Railway provides PORT environment variable
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5050;
-app.listen(PORT, '0.0.0.0', () => console.log(`Server running on ${PORT}`));
+
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 Health check: http://localhost:${PORT}/health`);
+  if (process.env.RAILWAY_STATIC_URL) {
+    console.log(`🚄 Railway URL: ${process.env.RAILWAY_STATIC_URL}`);
+  }
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
+});
