@@ -9,16 +9,23 @@ dotenv.config();
 
 const app: Application = express();
 
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS;
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim());
 
-// Configure CORS for production
-app.use(
-  cors({
-    origin: ALLOWED_ORIGINS?.split(',') || [],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: function (origin: string | undefined, callback: Function) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked: ${origin}`);
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  credentials: true,
+};
 
+app.use(cors(corsOptions));
 // Use Express built-in JSON parser (body-parser is deprecated)
 app.use(express.json());
 
