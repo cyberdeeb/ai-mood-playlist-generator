@@ -54,6 +54,7 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV || 'development',
+    version: '1.0.1', // Added version to force new deployment
   });
 });
 
